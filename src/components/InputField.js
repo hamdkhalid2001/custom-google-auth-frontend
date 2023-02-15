@@ -17,7 +17,7 @@ function InputField(props) {
         id={props.data.id}
         className="bg-transparent border-b border-gray-400 w-full focus:outline-0 pb-1"
         required
-        autoComplete="off"
+        // autoComplete="off"
         focused={focused.toString()}
         onBlur={handleFocus}
         onChange={props.data.onChange}

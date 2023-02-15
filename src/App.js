@@ -4,9 +4,10 @@ import {
   BrowserRouter as Router,
   Routes,
   Route,
-  Navigate,
 } from "react-router-dom";
 import SignUp from './pages/Signup/Index';
+import Dashboard from './pages/Dashboard/Index'
+import Login from './pages/Login/Index';
 
 function App() {
   return (
@@ -22,6 +23,8 @@ function App() {
           }
         ></Route> */}
         <Route exact path="/" element={<SignUp />}></Route>
+        <Route exact path="/login" element={<Login />}></Route>
+        <Route exact path="/dashboard" element={<Dashboard />}></Route>
         {/* <Route exact path="/login" element={<Login />}></Route> */}
       </Routes>
     </Router>

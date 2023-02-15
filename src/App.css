@@ -10,6 +10,9 @@
 .input3{
     display: none;
 }
+.input4{
+    display: none;
+}
 
 input:invalid[focused="true"] + .input1{
     display: block;
@@ -19,4 +22,18 @@ input:invalid[focused="true"] + .input2{
 }
 input:invalid[focused="true"] + .input3{
     display: block;
+}
+input:invalid[focused="true"] + .input4{
+    display: block;
+}
+input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        display: none;
+}
+/* Change the white to any color */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus, 
+input:-webkit-autofill:active{
+    -webkit-box-shadow: 0 0 0 30px '#1E1E1E' inset !important;
 }

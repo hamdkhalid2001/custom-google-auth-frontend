@@ -1,49 +1,26 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 import InputField from "../../components/InputField";
 import GoogleBtn from "../../components/GoogleBtn";
-import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate , Link } from "react-router-dom";
 import { inject, observer } from 'mobx-react';
 
+
 function Index({ store }) {
-  const navigate = useNavigate();
-  const [signUpData, setSignUpData] = useState({
-    userName: "",
+    const navigate = useNavigate();
+  const [loginData, setLoginData] = useState({
     email: "",
     password: "",
-    age: null,
   });
 
-  const signUpFormData = [
-    {
-      type: "text",
-      name: "userName",
-      id: "userName",
-      onChange: handleFormData,
-      value: signUpData.userName,
-      pattern: "[a-zA-Z0-9]+",
-      err: "UserName shouldn't include spaces and characters!",
-      label: "USERNAME",
-      className: "input1",
-    },
-    {
-      type: "number",
-      name: "age",
-      id: "age",
-      onChange: handleFormData,
-      // value: userData.age,
-      pattern: "[a-zA-Z0-9]+",
-      err: "Age can only contain numbers",
-      label: "AGE",
-      className: "input2",
-    },
+  const loginFormData = [
     {
       type: "email",
       name: "email",
       id: "email",
       onChange: handleFormData,
-      value: signUpData.email,
+      value: loginData.email,
       pattern: "[a-z0-9._%+-]+@[a-z0-9.-]+.[a-z]{2,4}$",
       err: "It should be a valid email address!",
       label: "EMAIL",
@@ -54,7 +31,7 @@ function Index({ store }) {
       name: "password",
       id: "password",
       onChange: handleFormData,
-      value: signUpData.password,
+      value: loginData.password,
       pattern: "^(?=.*[a-z])(?=.*[0-9]).{8,16}$",
       err: "Password should be minimum 8 characters long and atleast one letter and one number!",
       label: "PASSWORD",
@@ -62,7 +39,7 @@ function Index({ store }) {
     },
   ];
   function handleFormData(event) {
-    setSignUpData((prevData) => {
+    setLoginData((prevData) => {
       return {
         ...prevData,
         [event.target.name]: event.target.value,
@@ -72,7 +49,7 @@ function Index({ store }) {
   const { status, error, mutate } = useMutation({
     mutationFn: (user) => {
       console.log("Data going: ",user)
-      return axios.post(`${process.env.REACT_APP_API_URL}/users/Signup`, user)
+      return axios.post(`${process.env.REACT_APP_API_URL}/users/Login`, user)
     },
     onError: (err) => {
       console.log("Error: ",err)
@@ -80,27 +57,27 @@ function Index({ store }) {
     onSuccess: (data) => {
       navigate("/dashboard");
       const newData = data.data.user
+      console.log(data)
       store.currentUserData = {role: data.data.role, data: newData}
       store.jwtToken = data.data.jwtToken.token
+
     },
   });
-
-  function handleSignUp(event) {
+  function handleLogIn(event) {
     event.preventDefault();
     mutate({
-      UserName: signUpData.userName,
-      Email: signUpData.email,
-      Password: signUpData.password,
-      Age: Number(signUpData.age),
+      Email: loginData.email,
+      Password: loginData.password,
     });
   }
+  
 
   return (
     <div className="grid place-items-center">
-      <h1 className="text-5xl">Create New Account</h1>
+      <h1 className="text-5xl">Log In To Your Account</h1>
       <section className="w-[90%] max-w-[375px] mt-7">
-        <form onSubmit={handleSignUp} method="POST">
-          {signUpFormData.map((element, index) => {
+        <form onSubmit={handleLogIn} method="POST">
+          {loginFormData.map((element, index) => {
             return <InputField data={element} key={index} />;
           })}
           {status === "error" && <div className="text-red-500 text-center text-lg mt-3 -mb-5">{error.message}</div> }
@@ -110,17 +87,14 @@ function Index({ store }) {
               type="submit"
               className="bg-[#e3ae3e] font-normal mt-8 m-auto w-[210px] py-2"
             >
-              Sign Up
+              Log In
             </button>
             <GoogleBtn />
           </div>
         </form>
       </section>
-      <Link to={"/login"}>
-        <p className="underline font-normal mt-6">Already have an account?</p>
-      </Link>
     </div>
-  );
+  )
 }
-export default inject('store')(observer(Index));
 
+export default inject('store')(observer(Index));
